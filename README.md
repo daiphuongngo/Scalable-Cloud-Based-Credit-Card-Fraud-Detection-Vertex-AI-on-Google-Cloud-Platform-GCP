@@ -72,7 +72,9 @@ I expect my work to deliver trained binary classification models deployed on Ver
 ## New Stages Used
 
 Some aspects I will examine to put into my project include:
+
 •	Vertex AI Pipelines to automate data ingestion from BigQuery, train, validate, evaluate and deploy models (not convered in the course assignments and I have mentioned above).
+
 •	Vertex AI Model Registry to manage model versions for each model used.
 
-I also think about simulating real time credit card fraud detection by streaming small data via PubSub and provide real time score with either Cloud Functions or Dataflow which triggers Vertex AI Endpoints.
+I also plan for simulating real time credit card fraud detection by streaming small data via PubSub and provide real time score with either Cloud Functions or Dataflow which triggers Vertex AI Endpoints.
