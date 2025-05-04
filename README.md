@@ -78,3 +78,17 @@ Some aspects I will examine to put into my project include:
 •	Vertex AI Model Registry to manage model versions for each model used.
 
 I also plan for simulating real time credit card fraud detection by streaming small data via PubSub and provide real time score with either Cloud Functions or Dataflow which triggers Vertex AI Endpoints.
+
+## Dataset Creation & Analysis in BigQuery
+
+![1 - Create dataset and table in bigquery](https://github.com/user-attachments/assets/6c83b38d-6bc3-4fbd-ade8-c38f2aee215d)
+
+![2 - select first 10](https://github.com/user-attachments/assets/2f9b5cd9-b7dd-4659-bc80-b1ff104ff780)
+
+![2 - select first 10 p2](https://github.com/user-attachments/assets/0962df35-92b1-428a-9b51-0262934d827f)
+
+![3 - Check summary of class](https://github.com/user-attachments/assets/953ac953-c10a-42cf-83cf-e38d657993fa)
+
+![4 - Stats of Amount](https://github.com/user-attachments/assets/1bddef00-d516-4de5-a90e-e4a09a5c84bd)
+
+## Vertex AI Pipeline
