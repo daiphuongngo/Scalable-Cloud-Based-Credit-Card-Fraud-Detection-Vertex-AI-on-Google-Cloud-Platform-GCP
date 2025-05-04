@@ -92,3 +92,37 @@ I also plan for simulating real time credit card fraud detection by streaming sm
 ![4 - Stats of Amount](https://github.com/user-attachments/assets/1bddef00-d516-4de5-a90e-e4a09a5c84bd)
 
 ## Vertex AI Pipeline
+
+### Vertex Workbench Notebook Creation
+
+![5 - Vertex Workbench Notebook Creation](https://github.com/user-attachments/assets/7d2a9c12-7df0-496d-9588-597d626f1773)
+
+### Libraries Setup and Data Loading
+
+![Libraries Setup and Data Loading](https://github.com/user-attachments/assets/8b06cdf4-4583-44ce-9669-b5bbee6676fc)
+
+### Class Distribution
+
+![5 - Vertex Workbench Notebook Creation](https://github.com/user-attachments/assets/324a7b5c-62d2-49f7-a337-caef2de633cd)
+
+### Correlation Matrix
+
+![8 - Correlation Matrix](https://github.com/user-attachments/assets/40a7c697-98c2-431a-8ee0-b6443cf325d7)
+
+### Data Preprocessing, Train Test Split, Handling Class Imbalance with SMOTE, Model Training with Random Forest
+
+![9 - Data Preprocessing, Train Test Split, Handling Class Imbalance with SMOTE, Model Training with Random Forest](https://github.com/user-attachments/assets/f94595dc-0e73-4576-9042-ab9b65f6ba36)
+
+### Model Evaluation
+
+![10 - Model Evaluation](https://github.com/user-attachments/assets/6c33f1e5-9872-42a9-b777-84ec059f9f13)
+
+![10 - Model Evaluation p2](https://github.com/user-attachments/assets/60a14126-7dd3-4be7-898e-d04f4c53a4b9)
+
+### Save and Upload Model to GCS
+
+![11 - Save and Upload Model to GCS](https://github.com/user-attachments/assets/29926ab5-d970-42cd-906b-6f4713729702)
+
+
+
+
