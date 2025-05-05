@@ -38,7 +38,8 @@ I expect my work to deliver trained binary classification models deployed on Ver
 ```
            +--------------------+
            | Google Cloud       |
-           | Storage (GCS)      |   
+           | Storage (GCS)      |
+           | old & new data     |   
            +--------------------+
                      |
                      v
@@ -53,13 +54,6 @@ I expect my work to deliver trained binary classification models deployed on Ver
            | Vertex AI Workbench|                    |
            | (Jupyter + Colab   |                    |
            | + BigQuery ML)     |                    |
-           +--------------------+                    |
-                     |                               |
-                     v                               |
-           +--------------------+                    |
-           | Vertex AI Pipelines|                    |
-           | + Model Registry   |                    |
-           | + HyperTune (opt)  |                    |
            +--------------------+                    |
                      |                               |
                      v                               |
