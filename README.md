@@ -24,6 +24,27 @@ My selected dataset is provided by publicly available source on Kaggle with a do
 
 https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud
 
+## Technologies
+
+- **Python**
+
+- **PySpark**
+
+- **SQL**
+
+- **Google Cloud Storage**
+
+- **BigQuery**
+
+- **Vertex AI Workbench**
+
+- **Colab Enterprise**
+
+- **Dataproc**
+
+- **Pub/Sub**
+
+
 ## Expected Results
 
 I expect my work to deliver trained binary classification models deployed on Vertex AI that predicts the probability of a credit card transaction being fraudument. Models to be trained and evaluated include Decision Tree, Random Forest, XGBoost, LightGBM and more if necessary. Furthermore, a simulated new real-time scoring setup using Pub/Sub, Dataflow and Vertex AI Endpoint. 
@@ -242,6 +263,8 @@ This pipeline demonstrates a complete **ML lifecycle on GCP**:
   - Two part files and a `_SUCCESS` flag confirm successful Spark output write.
   - Timestamped May 4, 2025, 8:17 PM.
 
+![train_model_job](https://github.com/user-attachments/assets/37654109-36fe-482a-8aa7-2a1f4d349bc5)
+
 ![19 - Check the GCS results of predicted output](https://github.com/user-attachments/assets/dbb50f59-daed-45cd-9b5a-e263d11e9d38)
 
 ---
@@ -289,6 +312,8 @@ This pipeline demonstrates a complete **ML lifecycle on GCP**:
 ![21 - Created sub](https://github.com/user-attachments/assets/bb85f5ff-5e52-4960-8787-c9811be88bee)
 
 ![22 - Completed Dataproc job for sub to BigQuery](https://github.com/user-attachments/assets/6a5a0044-6fae-4b60-a502-aa8571d1c64f)
+
+![fraud_pubsub_job](https://github.com/user-attachments/assets/824d168f-ed40-407d-9063-5a5ea5237eea)
 
 ![23 - Completed pubsub to bigquery](https://github.com/user-attachments/assets/ebb04d96-f8b4-493f-a92f-b8754239c294)
 
