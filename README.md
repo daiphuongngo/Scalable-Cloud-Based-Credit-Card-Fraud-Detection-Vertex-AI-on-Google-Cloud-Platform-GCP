@@ -188,8 +188,139 @@ This project demonstrates an end-to-end machine learning pipeline for credit car
   - **ROC AUC Score:** ~0.99
 - The model performs exceptionally well, considering the original class imbalance.
 
+---
+
+### 11. **Creating a Dataproc Cluster**
+A Dataproc cluster named `cluster-fraud-detection-useast` was created with 1 master and multiple workers, optimized for Spark jobs.
+![12 - Create Dataproc Cluster](https://github.com/user-attachments/assets/c0bfd95e-e2d5-4878-8b9d-d4d2d241cf8e)
 
 
+---
+
+### 12. **Training with Dataproc Job**
+The training script (`train_model.py`) was submitted as a **PySpark job** to the Dataproc cluster.
+![13 - Retrain model with Dataproc vs GCS to fit the libraries version](https://github.com/user-attachments/assets/ca4413bc-44df-4541-b806-707db6aabe13)
+
+![13 - Retrain model with Dataproc vs GCS to fit the libraries version (succeeded)](https://github.com/user-attachments/assets/c566bfb9-5354-4c67-9091-80a1709b4c1f)
+
+Once successful, the updated model was verified in GCS.
+![14 - Succeeded retraining the model](https://github.com/user-attachments/assets/9d88a6f3-ce20-4473-ad30-060dc40dfe35)
+
+![15 - Check if the retrained model is updated in GCS](https://github.com/user-attachments/assets/41cbac2b-0cd5-4751-a39f-4730563ad415)
+
+---
+
+### 13. **Prediction Job on New Data**
+- Another PySpark job (`job.py`) was submitted to predict on a new dataset.
+- The prediction job succeeded, and the results were stored in a new BigQuery table:
+  ```
+  csci-e192-project-452505.fraud_detection_dataset.fraud_predictions
+  ```
+![16 - Run job to predict on new input](https://github.com/user-attachments/assets/018f7d31-6249-4cf2-9b1b-ec1fab30757a)
+
+![17 - Completed the job predicting new data successfully](https://github.com/user-attachments/assets/05c2f656-b9d0-48db-935f-bd2db996489f)
+---
+
+### 14. **Verifying Predictions in BigQuery**
+A query confirmed that predictions were written successfully with `predicted_proba` and `predicted_class` for each transaction.
+![18 - Checking the BigQuery table of newly predicted output](https://github.com/user-attachments/assets/d7033dc4-ceb1-430d-b581-024d6f170ce2)
+
+---
+
+## Notes of current progress
+This pipeline demonstrates a complete **ML lifecycle on GCP**:
+- Scalable data processing with **Dataproc**
+- ML experimentation using **Vertex AI Workbench**
+- Model deployment and versioning in **Cloud Storage**
+- Batch inference jobs using **PySpark**
+- Persistent storage of results in **BigQuery**
+
+---
+
+### **15. Model Prediction & Output Storage in GCS**
+- **Colab Notebook**: You loaded and displayed predicted output files using `gcsfs` and `pandas` from:
+  ```
+  gs://cscie192-phuong-bucket-useast1/final-project/prediction_output/part-*
+  ```
+- The predictions contain features (V1–V28), `Amount`, `predicted_proba`, and `predicted_class`.
+
+- **GCS Confirmation**:
+  - Two part files and a `_SUCCESS` flag confirm successful Spark output write.
+  - Timestamped May 4, 2025, 8:17 PM.
+
+![19 - Check the GCS results of predicted output](https://github.com/user-attachments/assets/dbb50f59-daed-45cd-9b5a-e263d11e9d38)
+
+---
+
+### **16. Verification in BigQuery**
+- I created a table:
+  ```
+  fraud_detection_dataset.fraud_predictions
+  ```
+- The schema includes all 28 features, amount, `predicted_proba`, and `predicted_class`.
+
+- A query:
+  ```sql
+  SELECT * FROM `fraud_detection_dataset.fraud_predictions` LIMIT 100;
+  ```
+  confirms expected prediction results - with fraud predictions (`predicted_class = 1`) having high `predicted_proba`.
+
+![20 - Colab check GCS outputs part 1](https://github.com/user-attachments/assets/efec7c72-47d4-42e7-878f-5664adfde8e3)
+
+![20 - Colab check GCS outputs part 2](https://github.com/user-attachments/assets/136dd94d-9782-4899-8a32-a0afae416ca3)
+
+---
+
+### **17. Pub/Sub + Dataproc Job for Real-time Alerting**
+- **Job `fraud_pubsub_job` succeeded**, reading new data, predicting fraud, and writing results back to:
+  ```
+  gs://.../prediction_output/
+  ```
+
+- **Another job `job-pubsub-bigquery4`** confirms:
+  - Messages (fraud predictions) were published to a **Pub/Sub topic**.
+  - You successfully used Spark to push predictions to Pub/Sub:
+    ```
+    Published message: {"transaction_id": ..., "score": ..., "label": ...}
+    ```
+![21 - Create sub](https://github.com/user-attachments/assets/0e1405f6-9b94-40be-9381-a300e1eb32c1)
+
+
+
+---
+
+### **18. Pub/Sub Subscription & Dataproc Job for BigQuery Alerts**
+- I created a **subscription `fraud-subscription`** to the topic `fraud-alerts`.
+
+![21 - Created sub](https://github.com/user-attachments/assets/bb85f5ff-5e52-4960-8787-c9811be88bee)
+
+![22 - Completed Dataproc job for sub to BigQuery](https://github.com/user-attachments/assets/6a5a0044-6fae-4b60-a502-aa8571d1c64f)
+
+![23 - Completed pubsub to bigquery](https://github.com/user-attachments/assets/ebb04d96-f8b4-493f-a92f-b8754239c294)
+
+- This subscription was configured to:
+  - **Delivery type**: Write directly to BigQuery.
+  - **Target table**: `fraud_alert_dataset2.fraud_alert_table`.
+  - Schema: Uses the **table schema**.
+
+- **BigQuery table `fraud_alert_table`** exists and will capture streaming alerts from Pub/Sub for downstream usage or visualization.
+
+![24 - BigQuery fraud detection dataset and table](https://github.com/user-attachments/assets/dd7bbf1a-1315-4bdf-b475-1ba3a4ef24fc)
+
+![24 - BigQuery fraud detection table as alert](https://github.com/user-attachments/assets/064debce-4b57-4fa3-8b94-ee72685d3b53)
+
+---
+
+### **19. Summary of Pipeline Flow**
+Here’s the **end-to-end data pipeline** you built:
+
+1. **Dataproc Job** → Predict fraud on input data.
+2. **Output stored** → GCS (`prediction_output/`).
+3. **Prediction results loaded** → into BigQuery `fraud_predictions`.
+4. **Streamed output** → Published to Pub/Sub (`fraud-alerts` topic).
+5. **Subscription** → Pushes Pub/Sub messages to `fraud_alert_table` in BigQuery.
+6. **Dataproc Job** → Record fraud alert in BigQuery when Pub/Sub messages are triggered
+7. **BigQuery alerts table** → Can now be visualized or queried for fraud monitoring.
 
 
 
