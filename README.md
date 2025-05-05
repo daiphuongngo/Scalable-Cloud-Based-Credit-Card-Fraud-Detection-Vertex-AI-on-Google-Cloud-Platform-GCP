@@ -329,6 +329,12 @@ This pipeline demonstrates a complete **ML lifecycle on GCP**:
 
 ![24 - BigQuery fraud detection table as alert](https://github.com/user-attachments/assets/064debce-4b57-4fa3-8b94-ee72685d3b53)
 
+![Succeeded in writing to PubSub and BigQuery](https://github.com/user-attachments/assets/79f963af-df3c-4982-8b7f-1ad72ff721a5)
+
+![Wrote alert to BigQuery](https://github.com/user-attachments/assets/17c7cc92-d214-4bd9-827f-68cab98c2c79)
+
+
+
 ---
 
 ### **19. Summary of Pipeline Flow**
