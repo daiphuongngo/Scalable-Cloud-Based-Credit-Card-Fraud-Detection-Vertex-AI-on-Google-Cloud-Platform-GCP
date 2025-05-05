@@ -286,9 +286,7 @@ This pipeline demonstrates a complete **ML lifecycle on GCP**:
 
 ![20 - Colab check GCS outputs part 2](https://github.com/user-attachments/assets/136dd94d-9782-4899-8a32-a0afae416ca3)
 
-![24 - BigQuery fraud detection dataset and table](https://github.com/user-attachments/assets/dd7bbf1a-1315-4bdf-b475-1ba3a4ef24fc)
 
-![24 - BigQuery fraud detection table as alert](https://github.com/user-attachments/assets/064debce-4b57-4fa3-8b94-ee72685d3b53)
 ---
 
 ### **17. Pub/Sub + Dataproc Job for Real-time Alerting**
@@ -327,7 +325,9 @@ This pipeline demonstrates a complete **ML lifecycle on GCP**:
 
 - **BigQuery table `fraud_alert_table`** exists and will capture streaming alerts from Pub/Sub for downstream usage or visualization.
 
+![24 - BigQuery fraud detection dataset and table](https://github.com/user-attachments/assets/dd7bbf1a-1315-4bdf-b475-1ba3a4ef24fc)
 
+![24 - BigQuery fraud detection table as alert](https://github.com/user-attachments/assets/064debce-4b57-4fa3-8b94-ee72685d3b53)
 
 ---
 
