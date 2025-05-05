@@ -94,7 +94,7 @@ I also plan for simulating real time credit card fraud detection by streaming sm
 
 ## Vertex AI Pipeline
 
-Here is a detailed explanation of your fraud detection model pipeline using Vertex AI and GCP, based on the first 10 screenshots you've shared:
+Here is a detailed explanation of my fraud detection model pipeline using Vertex AI and GCP, based on the first 10 screenshots I've shared:
 
 ---
 
@@ -238,7 +238,7 @@ This pipeline demonstrates a complete **ML lifecycle on GCP**:
 ---
 
 ### **15. Model Prediction & Output Storage in GCS**
-- **Colab Notebook**: You loaded and displayed predicted output files using `gcsfs` and `pandas` from:
+- **Colab Notebook**: I loaded and displayed predicted output files using `gcsfs` and `pandas` from:
   ```
   gs://cscie192-phuong-bucket-useast1/final-project/prediction_output/part-*
   ```
@@ -279,7 +279,7 @@ This pipeline demonstrates a complete **ML lifecycle on GCP**:
 
 - **Another job `job-pubsub-bigquery4`** confirms:
   - Messages (fraud predictions) were published to a **Pub/Sub topic**.
-  - You successfully used Spark to push predictions to Pub/Sub:
+  - I successfully used Spark to push predictions to Pub/Sub:
     ```
     Published message: {"transaction_id": ..., "score": ..., "label": ...}
     ```
@@ -312,7 +312,7 @@ This pipeline demonstrates a complete **ML lifecycle on GCP**:
 ---
 
 ### **19. Summary of Pipeline Flow**
-Here’s the **end-to-end data pipeline** you built:
+Here’s the **end-to-end data pipeline** I built:
 
 1. **Dataproc Job** → Predict fraud on input data.
 2. **Output stored** → GCS (`prediction_output/`).
