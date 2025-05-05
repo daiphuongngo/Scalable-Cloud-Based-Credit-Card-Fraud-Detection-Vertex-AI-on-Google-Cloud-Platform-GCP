@@ -33,7 +33,7 @@ I expect my work to deliver trained binary classification models deployed on Ver
 1.	Google Cloud Storage is used for dataset storage including training and testing data.
 2.	BigQuery is in usage then for data wrangling, SQL analytics and feature engineering in Python.
 3.	Vertex AI is the backbone of Machine Learning model training on Jupyter notebooks in Python (pandas, sklearn, matplotlib) with custom trainings (based on models) or AutoML (if needed). Retraining can be considered on VertexAI when testing data is predicted and deployed before new data comes in. 
-4.	Cloud Scheduler, PubSub, Dataflow (probably) are leverage for triggering real-time scoring pipeline.
+4.	PubSub, Dataproc are leverage for triggering real-time scoring pipeline.
 
 ```
            +--------------------+
@@ -44,28 +44,29 @@ I expect my work to deliver trained binary classification models deployed on Ver
                      v
            +--------------------+
            | BigQuery           |
-           | Data Exploration   |
-           | + SQL Preprocessing|
-           +--------------------+
-                     |
-                     v
-           +--------------------+
-           | Vertex AI Workbench|
-           | (Notebooks + AutoML|
-           | or Custom Model)   |
-           +--------------------+
-                     |
-                     v
-           +--------------------+
-           | Vertex AI Pipelines|
-           | + Model Registry   |
-           | + HyperTune (opt)  |
-           +--------------------+
-                     |
-                     v
-           +--------------------+
-           | Vertex AI Endpoint |
-           | for real-time infer|
+           | Data Exploration   | <<------------------
+           | + SQL Preprocessing|                    |
+           +--------------------+                    |
+                     |                               |
+                     v                               |
+           +--------------------+                    |
+           | Vertex AI Workbench|                    |
+           | (Jupyter + Colab   |                    |
+           | + BigQuery ML)     |                    |
+           +--------------------+                    |
+                     |                               |
+                     v                               |
+           +--------------------+                    |
+           | Vertex AI Pipelines|                    |
+           | + Model Registry   |                    |
+           | + HyperTune (opt)  |                    |
+           +--------------------+                    |
+                     |                               |
+                     v                               |
+           +--------------------+                    |
+           | Vertex AI Endpoint |                    |
+           | for real-time infer|---------------------
+           | Dataproc, Pub Sub  |
            +--------------------+
 ```
 
@@ -93,35 +94,101 @@ I also plan for simulating real time credit card fraud detection by streaming sm
 
 ## Vertex AI Pipeline
 
-### Vertex Workbench Notebook Creation
+Here is a detailed explanation of your fraud detection model pipeline using Vertex AI and GCP, based on the first 10 screenshots you've shared:
 
-![5 - Vertex Workbench Notebook Creation](https://github.com/user-attachments/assets/7d2a9c12-7df0-496d-9588-597d626f1773)
+---
 
-### Libraries Setup and Data Loading
+### **Fraud Detection Model Pipeline Using Google Cloud Platform & Vertex AI**
 
-![Libraries Setup and Data Loading](https://github.com/user-attachments/assets/8b06cdf4-4583-44ce-9669-b5bbee6676fc)
+This project demonstrates an end-to-end machine learning pipeline for credit card fraud detection using Google Cloud Platform (GCP), leveraging **BigQuery**, **Vertex AI Workbench**, and **GCS** (Google Cloud Storage) as well as **Pub/Sub** and **Dataproc**.
 
-### Class Distribution
+---
 
-![5 - Vertex Workbench Notebook Creation](https://github.com/user-attachments/assets/324a7b5c-62d2-49f7-a337-caef2de633cd)
+### **1. Vertex AI Workbench Notebook Setup**
+![5 - Vertex Workbench Notebook Creation](https://github.com/user-attachments/assets/acf67aab-db36-490e-9310-5a23d70f9f80)
 
-### Correlation Matrix
+- A **Vertex AI Workbench** instance named `fraud-detection-notebook` was created using the `e2-standard-4` machine type (4 vCPUs, 16 GB RAM), running Python 3 (Intel MKL).
+- This notebook serves as the central environment for data preprocessing, training, evaluation, and integration with BigQuery and GCS.
 
-![8 - Correlation Matrix](https://github.com/user-attachments/assets/40a7c697-98c2-431a-8ee0-b6443cf325d7)
+---
 
-### Data Preprocessing, Train Test Split, Handling Class Imbalance with SMOTE, Model Training with Random Forest
+### **2. External Table Creation in BigQuery**
+![1 - Create dataset and table in bigquery](https://github.com/user-attachments/assets/659746d4-f21d-4646-89fd-5bbd34b2f2d5)
 
-![9 - Data Preprocessing, Train Test Split, Handling Class Imbalance with SMOTE, Model Training with Random Forest](https://github.com/user-attachments/assets/f94595dc-0e73-4576-9042-ab9b65f6ba36)
+- An **external table** was created using a CSV file stored in a GCS bucket. The file `creditcard.csv` was linked via URI using `CREATE OR REPLACE EXTERNAL TABLE` with the option `format='CSV'` and `skip_leading_rows=1`.
+- This approach enables query execution without duplicating data into BigQuery’s native storage, thus reducing cost and maintaining data freshness.
 
-### Model Evaluation
+---
 
-![10 - Model Evaluation](https://github.com/user-attachments/assets/6c33f1e5-9872-42a9-b777-84ec059f9f13)
+### **3. Previewing the Dataset**
+![2 - select first 10](https://github.com/user-attachments/assets/6671e052-69ad-46a3-bfe7-2d894a63d285)
 
-![10 - Model Evaluation p2](https://github.com/user-attachments/assets/60a14126-7dd3-4be7-898e-d04f4c53a4b9)
+![2 - select first 10 p2](https://github.com/user-attachments/assets/bad14a37-e76e-424d-a1be-b1e0a86244ae)
 
-### Save and Upload Model to GCS
+- A query was run to view the **first 10 rows** from the external table. This helps verify the schema and data integrity immediately after setup.
 
-![11 - Save and Upload Model to GCS](https://github.com/user-attachments/assets/29926ab5-d970-42cd-906b-6f4713729702)
+---
+
+### **4. Class Distribution Summary**
+![3 - Check summary of class](https://github.com/user-attachments/assets/d737964c-a573-4ad0-9ec4-386a7350c79c)
+
+- A class distribution check (`SELECT Class, COUNT(*) GROUP BY Class`) was executed.
+- Output: There are **284,315 non-fraudulent (Class=0)** and **492 fraudulent (Class=1)** transactions, highlighting the **severe class imbalance** common in fraud datasets.
+
+---
+
+### **5. Basic Statistics of 'Amount' Column**
+![4 - Stats of Amount](https://github.com/user-attachments/assets/08de09b0-df7e-4734-86fd-ca4410a44e24)
+
+- A simple aggregation query retrieved the **average and standard deviation** of the `Amount` field.
+- This helped understand the transaction value distribution and prepare for scaling during preprocessing.
+
+---
+
+### **6. Data Exploration**
+![8 - Correlation Matrix](https://github.com/user-attachments/assets/e2419d1a-2ec6-4947-936b-2465ed839252)
+
+- A **correlation matrix heatmap** was created to visualize relationships among features and identify any multicollinearity. PCA-transformed variables (V1 to V28) show weak correlations, as expected from anonymized data.
+
+---
+
+### **7. Class Imbalance Visualization**
+![7 - Class Distribution](https://github.com/user-attachments/assets/cb8da513-d54a-4e9a-8c6f-c325aac30fbb)
+
+- A bar plot confirms the **high imbalance**, reinforcing the need to apply resampling techniques such as SMOTE.
+
+---
+
+### **8. Preprocessing and Train-Test Split**
+![9 - Data Preprocessing, Train Test Split, Handling Class Imbalance with SMOTE, Model Training with Random Forest](https://github.com/user-attachments/assets/16d53701-7de5-4128-93de-9a0b66a65722)
+
+- The **Time** column was dropped, and the **Amount** column was standardized using `StandardScaler`.
+- The dataset was split using stratified sampling (80% training, 20% testing) to preserve class ratio across splits.
+
+---
+
+### **9. Class Imbalance Handling with SMOTE**
+![9 - Data Preprocessing, Train Test Split, Handling Class Imbalance with SMOTE, Model Training with Random Forest](https://github.com/user-attachments/assets/16d53701-7de5-4128-93de-9a0b66a65722)
+- **SMOTE (Synthetic Minority Oversampling Technique)** was applied to the training data to synthetically generate minority class (fraud) samples, helping mitigate the class imbalance issue before model training.
+
+---
+
+### **10. Model Training and Evaluation (Random Forest)**
+![10 - Model Evaluation](https://github.com/user-attachments/assets/013fad6b-63c2-4992-8f47-1e817aab71b1)
+
+![10 - Model Evaluation p2](https://github.com/user-attachments/assets/23686cd2-14e3-42d7-8e11-4a7e0ade88d8)
+
+- A **Random Forest Classifier** was trained on the resampled dataset. Evaluation was done using:
+  - **Classification Report** (Precision, Recall, F1-score)
+  - **Confusion Matrix**
+  - **ROC-AUC Score** and ROC Curve
+- Results show high accuracy and strong fraud detection capability:
+  - **Precision:** 0.87 (fraud), 1.00 (non-fraud)
+  - **Recall:** 0.83 (fraud), 1.00 (non-fraud)
+  - **ROC AUC Score:** ~0.99
+- The model performs exceptionally well, considering the original class imbalance.
+
+
 
 
 
