@@ -56,6 +56,8 @@ I expect my work to deliver trained binary classification models deployed on Ver
 3.	Vertex AI is the backbone of Machine Learning model training on Jupyter notebooks in Python (pandas, sklearn, matplotlib) with custom trainings (based on models) or AutoML (if needed). Retraining can be considered on VertexAI when testing data is predicted and deployed before new data comes in. 
 4.	PubSub, Dataproc are leverage for triggering real-time scoring pipeline.
 
+## Processing Pipeline - System Architecture and Design Diagram:
+
 ```
            +--------------------+
            | Google Cloud       |
@@ -65,7 +67,7 @@ I expect my work to deliver trained binary classification models deployed on Ver
                      |
                      v
            +--------------------+
-           | BigQuery           |
+           | BigQuery           |  [ BigQuery Table via Spark-BigQuery Connector ]	
            | Data Exploration   | <<------------------
            | + SQL Preprocessing|                    |
            +--------------------+                    |
@@ -73,8 +75,8 @@ I expect my work to deliver trained binary classification models deployed on Ver
                      v                               |
            +--------------------+                    |
            | Vertex AI Workbench|                    |
-           | (Jupyter + Colab   |                    |
-           | + BigQuery ML)     |                    |
+           | (Jupyter + Colab   |                    |  [ Pub/Sub Topic: "fraud-alerts" ]    
+           | in PySpark)        |                    | 
            +--------------------+                    |
                      |                               |
                      v                               |
@@ -85,15 +87,102 @@ I expect my work to deliver trained binary classification models deployed on Ver
            +--------------------+
 ```
 
-## New Stages Used
+• Model Training: I trained the RandomForestClassifier using sklearn on Vertex AI Workbench’s Jupyter notebook and saved as .pkl to GCS. An alternative method is coding in PySpark in a train_model.py file saved in GCS folder that could be used and run via Dataproc to generate the model’s .pkl file stored in GCS.
 
-Some aspects I will examine to put into my project include:
+• Prediction: Via Dataproc job run, PySpark job reads test data (10 testing rows without Target feature), applies the model, scores each row.
 
-•	Vertex AI Pipelines to automate data ingestion from BigQuery, train, validate, evaluate and deploy models (not convered in the course assignments and I have mentioned above).
+• Publishing: Results are published to Pub/Sub as fraud alerts in JSON format.
 
-•	Vertex AI Model Registry to manage model versions for each model used.
+• Storage: When the model scored data, the output will be written via Dataproc job run to BigQuery for further analysis.
 
-I also plan for simulating real time credit card fraud detection by streaming small data via PubSub and provide real time score with either Cloud Functions or Dataflow which triggers Vertex AI Endpoints.
+## Implementation
+			
+						 					
+My Technologies Used include: 
+
+•	Google Cloud Platform: GCS, BigQuery, Pub/Sub, Dataproc, Vertex AI
+
+•	Programming Languages: Python, PySpark, SQL
+
+•	Libraries: scikit-learn, pandas, joblib, google-cloud-pubsub, google-cloud-storage
+
+My Step-by-step Highlights include:
+
+1.	Uploaded dataset to GCS
+
+2.	Used BigQuery for preprocessing & EDA
+
+3.	Trained and saved an sklearn RandomForestClassifier on local Jupyter or Vertex AI Jupyter:
+
+4.	Deployed PySpark jobs on Dataproc’s job using train_model.py:
+
+•	Read test data
+
+•	Loaded model from GCS with joblib
+
+•	Applied model and generated predictions
+
+5.	Published alerts to Pub/Sub via Dataproc’s job using fraud_pubsub_bigquery_job.py
+
+6.	Saved full scored dataset to BigQuery table (fraud_alert_dataset2.fraud_alert_table)
+
+7.	Troubleshot schema compatibility (resolved INT64 → use "INT" or "BIGINT")
+
+8.	Verified Pub/Sub + BigQuery integration	
+
+## Results:
+
+Here are the results of my Credit Card Fraud Detection project:
+
+•	Model Development with Vertex AI Workbench and PySpark 
+
+•	Spark job logs showing successful execution via Dataproc
+
+•	Output df.show() confirming predicted results on Colab Enterprise
+
+•	Pub/Sub messages showing published fraud alerts
+
+•	BigQuery tables with full output of fraud alert and fraud classification 
+
+## Bonus Option
+
+•	I used Pub/Sub for real-time or near real-time scoring alerts.
+
+•	I also integrated Spark-BigQuery Connector, which was not covered in assignments.
+
+•	I also added Vertex AI model / PySpark model loading via GCS.
+
+•	I simulated streaming fraud detection and storage for audit that are highly applicable for real world usage.
+
+## Conclusions and Lesson Learned
+
+**Lessons Learned**:
+
+•	Understood practical setup of an end-to-end fraud detection pipeline using Spark.
+
+•	Learned to work with GCP services integration (Pub/Sub, BigQuery, Vertex AI, Dataproc, GCS).
+
+•	Gained experience with schema compatibility and PySpark casting issues.
+
+**Challenges**:
+
+•	Schema mismatch between PySpark and BigQuery that I have acknowledged and resolved with matching schema for both.
+
+•	INT64 data type not directly usable which I resolved using "BIGINT" or "LongType" in PySpark.
+
+•	Latency and errors in Pub/Sub delivery required manual subscription testing that I tested to ensure correct schema, extraction point and destination point.
+
+**Future Improvements**:
+
+•	Add Vertex AI Pipelines for more automatic model retraining and registry.
+
+•	Replace PySpark with Dataflow for real-time data processing, instead of near real-time processing.
+
+•	Visualize fraud statistics via Looker Studio / Tableau if the test data was given with more data records for statistical analysis and inference.
+
+•	Extend to a multi-class or unsupervised fraud detection setup.
+
+# Fraud Detection Pipeline:
 
 ## Dataset Creation & Analysis in BigQuery
 
@@ -329,11 +418,11 @@ This pipeline demonstrates a complete **ML lifecycle on GCP**:
 
 ![24 - BigQuery fraud detection table as alert](https://github.com/user-attachments/assets/064debce-4b57-4fa3-8b94-ee72685d3b53)
 
+![Edit Schema for fraud alert table](https://github.com/user-attachments/assets/f3692d14-b9e0-4aa5-8e5e-0b8720f8bee6)
+
 ![Succeeded in writing to PubSub and BigQuery](https://github.com/user-attachments/assets/79f963af-df3c-4982-8b7f-1ad72ff721a5)
 
 ![Wrote alert to BigQuery](https://github.com/user-attachments/assets/17c7cc92-d214-4bd9-827f-68cab98c2c79)
-
-
 
 ---
 
