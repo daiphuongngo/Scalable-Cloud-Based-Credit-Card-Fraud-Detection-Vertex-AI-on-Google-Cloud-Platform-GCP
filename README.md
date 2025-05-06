@@ -100,9 +100,9 @@ I expect my work to deliver trained binary classification models deployed on Ver
 						 					
 My Technologies Used include: 
 
-•	Google Cloud Platform: GCS, BigQuery, Pub/Sub, Dataproc, Vertex AI
+•	Google Cloud Platform: ``GCS``, ``BigQuery``, ``Pub/Sub``, ``Dataproc``, ``Vertex AI``
 
-•	Programming Languages: Python, PySpark, SQL
+•	Programming Languages: ``Python``, ``PySpark``, ``SQL``
 
 •	Libraries: scikit-learn, pandas, joblib, google-cloud-pubsub, google-cloud-storage
 
