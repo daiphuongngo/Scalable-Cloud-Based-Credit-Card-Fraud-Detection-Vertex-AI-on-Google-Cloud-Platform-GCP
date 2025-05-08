@@ -14,6 +14,8 @@
 
 ## Timeline: January 6th - May 16th, 2025
 
+## Youtube (3-minute highlight): https://youtu.be/02aflw1--Uk
+
 ## Project Goal and Problem Statement
 
 My goal for this project is to develop a scalable and efficient fraud detection pipeline for financial credit card transactions on Google Cloud Platform (GCP) so that customers are not charged for items that they did not purchase. My objective is to identify potentially fradulent transactions in near real-time leveraging multiple supervised learning models from cloud services for which I will retrain and deploy the models automatically as new data arrives.
