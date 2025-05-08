@@ -68,10 +68,10 @@ I expect my work to deliver trained binary classification models deployed on Ver
                      v
            +--------------------+
            | BigQuery           |  [ BigQuery Table via Spark-BigQuery Connector ]	
-           | Data Exploration   | <<------------------
-           | + SQL Preprocessing|                    |
-           +--------------------+                    |
-                     |                               |
+           | Data Exploration   | <<<<----------------
+           | + SQL Preprocessing|                    ^
+           +--------------------+                    ^
+                     |                               ^
                      v                               |
            +--------------------+                    |
            | Vertex AI Workbench|                    |
@@ -82,7 +82,7 @@ I expect my work to deliver trained binary classification models deployed on Ver
                      v                               |
            +--------------------+                    |
            | Vertex AI Endpoint |                    |
-           | for real-time infer|---------------------
+           | for real-time infer|----------------->>>>
            | Dataproc, Pub Sub  |
            +--------------------+
 ```
