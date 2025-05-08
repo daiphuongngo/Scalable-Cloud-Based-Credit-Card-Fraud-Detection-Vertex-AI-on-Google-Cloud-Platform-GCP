@@ -75,7 +75,7 @@ I expect my work to deliver trained binary classification models deployed on Ver
                      v                               |
            +--------------------+                    |
            | Vertex AI Workbench|                    |
-           | (Jupyter + Colab   |                    |  [ Pub/Sub Topic: "fraud-alerts" ]    
+           | (Jupyter + Colab   |                    |  [ Pub/Sub Topic: "fraud-alerts" via Dataproc job]    
            | in PySpark)        |                    | 
            +--------------------+                    |
                      |                               |
