@@ -84,7 +84,7 @@ I expect my work to deliver trained binary classification models deployed on Ver
                      v                               |
            +--------------------+                    |
            | Vertex AI Endpoint |                    |
-           | for real-time infer|----------------->>>>
+           | for real-time infer|----------------->>>x<<<<-----------[Cloud Scheduler setup]
            | Dataproc, Pub Sub  |
            +--------------------+
 ```
@@ -98,6 +98,8 @@ I expect my work to deliver trained binary classification models deployed on Ver
 • Publishing: Results are published to Pub/Sub as fraud alerts in JSON format.
 
 • Storage: When the model scored data, the output will be written via Dataproc job run to BigQuery for further analysis.
+
+• Scheduling: When time arrives as scheduled, the fraud detection request at scheduled time will be triggered to run Pub/Sub job that launches the Dataproc job which runs Pyspark Random Forest prediction using Random Forest model and the new data in GCS, and receives fraude alerts in Pub/Sub and Big Query.
 
 ## Implementation
 			
@@ -132,7 +134,9 @@ My Step-by-step Highlights include:
 
 7.	Troubleshot schema compatibility (resolved INT64 → use "INT" or "BIGINT")
 
-8.	Verified Pub/Sub + BigQuery integration	
+8.	Verified Pub/Sub + BigQuery integration
+
+9.	Scheduled Cloud Scheduler job that triggers Pub/Sub laurching the preset Dataproc job
 
 ## Results:
 
@@ -430,7 +434,11 @@ This pipeline demonstrates a complete **ML lifecycle on GCP**:
 
 ---
 
-### **19. Summary of Pipeline Flow**
+### **19. Cloud Scheduler schedules the Pub/Sub everyday at 6AM EDT**:
+![Create GCP Cloud Scheduler Job](https://github.com/user-attachments/assets/46d63816-1494-4301-a1c4-cc2fb9f6bd5a)
+
+
+### **20. Summary of Pipeline Flow**
 Here’s the **end-to-end data pipeline** I built:
 
 1. **Dataproc Job** → Predict fraud on input data.
@@ -438,8 +446,9 @@ Here’s the **end-to-end data pipeline** I built:
 3. **Prediction results loaded** → into BigQuery `fraud_predictions`.
 4. **Streamed output** → Published to Pub/Sub (`fraud-alerts` topic).
 5. **Subscription** → Pushes Pub/Sub messages to `fraud_alert_table` in BigQuery.
-6. **Dataproc Job** → Record fraud alert in BigQuery when Pub/Sub messages are triggered
+6. **Dataproc Job** → Record fraud alert in BigQuery when Pub/Sub messages are triggered.
 7. **BigQuery alerts table** → Can now be visualized or queried for fraud monitoring.
+8. **Cloud Scheduler** → Trigger Pub/Sub job at scheduled 6AM EDT for fraud detection schedule.
 
 
 
