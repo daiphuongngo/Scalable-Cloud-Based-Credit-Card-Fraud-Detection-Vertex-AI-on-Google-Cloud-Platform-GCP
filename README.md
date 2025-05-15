@@ -437,6 +437,7 @@ This pipeline demonstrates a complete **ML lifecycle on GCP**:
 ### **19. Cloud Scheduler schedules the Pub/Sub everyday at 6AM EDT**:
 ![Create GCP Cloud Scheduler Job](https://github.com/user-attachments/assets/46d63816-1494-4301-a1c4-cc2fb9f6bd5a)
 
+![Scheduler result](https://github.com/user-attachments/assets/e1af5455-f982-4260-af86-cf437df646c8)
 
 ### **20. Summary of Pipeline Flow**
 Here’s the **end-to-end data pipeline** I built:
