@@ -1,4 +1,4 @@
-# Scalable-Cloud-Based-Credit-Card-Fraud-Detection-PySpark-Vertex-AI-on-Google-Cloud-Platform-GCP
+# Scalable-Cloud-Based-Credit-Card-Fraud-Detection-PySpark-Vertex-AI-on-Cloud-Platforms-GCP-AWS
 
 ![Harvard_University_logo svg](https://github.com/user-attachments/assets/cf1e57fb-fe56-4e09-9a8b-eb8a87343825)
 
@@ -26,30 +26,9 @@ My selected dataset is provided by publicly available source on Kaggle with a do
 
 https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud
 
-## Technologies
-
-- **Python**
-
-- **PySpark**
-
-- **SQL**
-
-- **Google Cloud Storage**
-
-- **BigQuery**
-
-- **Vertex AI Workbench**
-
-- **Colab Enterprise**
-
-- **Dataproc**
-
-- **Pub/Sub**
-
-
 ## Expected Results
 
-I expect my work to deliver trained binary classification models deployed on Vertex AI that predicts the probability of a credit card transaction being fraudument. Models to be trained and evaluated include Decision Tree, Random Forest, XGBoost, LightGBM and more if necessary. Furthermore, a simulated new real-time scoring setup using Pub/Sub, Dataflow and Vertex AI Endpoint. 
+I expect my work to deliver trained binary classification models deployed on Vertex AI that predicts the probability of a credit card transaction being fraudument. Models to be trained and evaluated include Random Forest and more if necessary. Furthermore, a simulated new real-time scoring setup using Pub/Sub, Dataflow and Vertex AI Endpoint. On AWS, 
 
 ## Application Overview and Technologies used 
 
@@ -58,7 +37,7 @@ I expect my work to deliver trained binary classification models deployed on Ver
 3.	Vertex AI is the backbone of Machine Learning model training on Jupyter notebooks in Python (pandas, sklearn, matplotlib) with custom trainings (based on models) or AutoML (if needed). Retraining can be considered on VertexAI when testing data is predicted and deployed before new data comes in. 
 4.	PubSub, Dataproc are leverage for triggering real-time scoring pipeline.
 
-## Processing Pipeline - System Architecture and Design Diagram:
+## Processing Pipeline - System Architecture and Design Diagram of GCP and AWS:
 
 ```
            +--------------------+
@@ -88,7 +67,6 @@ I expect my work to deliver trained binary classification models deployed on Ver
            | Dataproc, Pub Sub  |
            +--------------------+
 ```
-
 ![ChatGPT Image May 8, 2025, 04_59_27 AM](https://github.com/user-attachments/assets/003004de-d743-45d2-af13-b5b44a544c40)
 
 • Model Training: I trained the RandomForestClassifier using sklearn on Vertex AI Workbench’s Jupyter notebook and saved as .pkl to GCS. An alternative method is coding in PySpark in a train_model.py file saved in GCS folder that could be used and run via Dataproc to generate the model’s .pkl file stored in GCS.
@@ -101,6 +79,10 @@ I expect my work to deliver trained binary classification models deployed on Ver
 
 • Scheduling: When time arrives as scheduled, the fraud detection request at scheduled time will be triggered to run Pub/Sub job that launches the Dataproc job which runs Pyspark Random Forest prediction using Random Forest model and the new data in GCS, and receives fraude alerts in Pub/Sub and Big Query.
 
+
+![ChatGPT Image May 16, 2025, 02_08_24 AM](https://github.com/user-attachments/assets/9aee4499-cbaa-4b5e-9d74-052858b41da5)
+
+
 ## Implementation
 			
 						 					
@@ -108,11 +90,13 @@ My Technologies Used include:
 
 •	Google Cloud Platform: ``GCS``, ``BigQuery``, ``Pub/Sub``, ``Dataproc``, ``Vertex AI``
 
+•	AWS: `S3`, `EMR Serverless`, `Glue`, `Athena`
+
 •	Programming Languages: ``Python``, ``PySpark``, ``SQL``
 
 •	Libraries: scikit-learn, pandas, joblib, google-cloud-pubsub, google-cloud-storage
 
-My Step-by-step Highlights include:
+My Step-by-step Highlights on GCP include:
 
 1.	Uploaded dataset to GCS
 
@@ -138,7 +122,28 @@ My Step-by-step Highlights include:
 
 9.	Scheduled Cloud Scheduler job that triggers Pub/Sub laurching the preset Dataproc job
 
-## Results:
+My Step-by-step Highlights on GCP include:
+
+1. Data Ingestion into Amazon S3
+
+2. Model Training with PySpark via EMR Serverless
+
+3. Prediction Job with EMR Serverless
+
+4. Schema Discovery with AWS Glue Crawler
+
+5. Query Results with Amazon Athena
+
+| Component                | AWS Service              | Purpose                                  |
+| ------------------------ | ------------------------ | ---------------------------------------- |
+| Data Storage             | Amazon S3                | Store raw, intermediate, and output data |
+| Model Training           | EMR Serverless (PySpark) | Train fraud detection model              |
+| Prediction               | EMR Serverless (PySpark) | Generate predictions and save results    |
+| Metadata Catalog         | AWS Glue Crawler         | Discover schema from S3 output           |
+| Data Catalog & Query     | Glue + Athena            | Query prediction results via SQL         |
+| Visualization (optional) | Amazon QuickSight        | Create fraud dashboards                  |
+
+## Results on GCP:
 
 Here are the results of my Credit Card Fraud Detection project:
 
@@ -151,6 +156,17 @@ Here are the results of my Credit Card Fraud Detection project:
 •	Pub/Sub messages showing published fraud alerts
 
 •	BigQuery tables with full output of fraud alert and fraud classification 
+
+## Results on AWS:
+
+| AWS Component    | Output Type             | Description                                            |
+| ---------------- | ----------------------- | ------------------------------------------------------ |
+| S3 (model)       | Spark MLlib model       | Trained classifier persisted in directory structure    |
+| S3 (predictions) | CSV                     | Scored results with fraud probability                  |
+| Glue             | Database + Table        | Metadata for Athena to read structured prediction data |
+| Athena           | SQL Query Results       | View and export high-risk transactions                 |
+| EMR              | Logs & Completion Flags | Training + inference run statuses                      |
+
 
 ## Bonus Option
 
@@ -168,7 +184,7 @@ Here are the results of my Credit Card Fraud Detection project:
 
 •	Understood practical setup of an end-to-end fraud detection pipeline using Spark.
 
-•	Learned to work with GCP services integration (Pub/Sub, BigQuery, Vertex AI, Dataproc, GCS).
+•	Learned to work with GCP services integration (Pub/Sub, BigQuery, Vertex AI, Dataproc, GCS) and AWS Services Integration (S3, Athena, Glue, EMR Serverless).
 
 •	Gained experience with schema compatibility and PySpark casting issues.
 
@@ -182,11 +198,11 @@ Here are the results of my Credit Card Fraud Detection project:
 
 **Future Improvements**:
 
-•	Add Vertex AI Pipelines for more automatic model retraining and registry.
+•	Add more components of Vertex AI Pipelines and AWS SageMajer for more automatic model retraining and registry.
 
 •	Replace PySpark with Dataflow for real-time data processing, instead of near real-time processing.
 
-•	Visualize fraud statistics via Looker Studio / Tableau if the test data was given with more data records for statistical analysis and inference.
+•	Visualize fraud statistics via GCP Looker Studio / Tableau / AWS QuickSight if the test data was given with more data records for statistical analysis and inference.
 
 •	Extend to a multi-class or unsupervised fraud detection setup.
 
@@ -451,5 +467,107 @@ Here’s the **end-to-end data pipeline** I built:
 7. **BigQuery alerts table** → Can now be visualized or queried for fraud monitoring.
 8. **Cloud Scheduler** → Trigger Pub/Sub job at scheduled 6AM EDT for fraud detection schedule.
 
+# AWS Pipeline
+
+Here's a **full step-by-step explanation** of my **fraud detection pipeline on AWS**, from ingesting CSV data in S3 to running PySpark in EMR Serverless, storing schema in Glue, and querying via Athena:
+
+---
+
+### **System Architecture Overview**
+
+---
+
+### 📌 **Step-by-Step Explanation**
+
+---
+
+### **1. Data Ingestion into Amazon S3**
+
+* **What happens:** I upload raw or processed CSV files (like `creditcard_sample.csv`, `sample_test_data.csv`, and `prediction_output/*.csv`) to an Amazon S3 bucket (`s3://daiphuongcscie192/credit_card_fraud_detection/`).
+* **Purpose:** Acts as my raw and intermediate data lake storage.
+
+![AWS S3](https://github.com/user-attachments/assets/d0cc8a11-7387-4158-a89a-9eb7954db9b0)
+
+---
+
+### **2. Model Training with PySpark via EMR Serverless**
+
+* **Trigger:** I run a PySpark job (e.g., `AWS_train_model.py`) using EMR Serverless.
+
+* **Script activities:**
+
+  * Load training data from S3.
+  * Preprocess and vectorize features.
+  * Train a `RandomForestClassifier` using PySpark MLlib.
+  * Save the trained model using `.save()` to a specific S3 path (`models/spark_rf_model`).
+
+* **Why EMR Serverless:** No need to manage clusters; it dynamically provisions compute and scales based on job load.
+
+![AWS train model py](https://github.com/user-attachments/assets/4440ac63-bc3d-401f-9094-3ea3b9f0efba)
+
+![AWS EMR train model](https://github.com/user-attachments/assets/356d36cc-786c-4b9e-9d43-9a2d50dd80a0)
+
+---
+
+### **3. Prediction Job with EMR Serverless**
+
+* **Trigger:** A second PySpark job (e.g., `predict_fraud.py`) runs using the trained model.
+* **Script activities:**
+
+  * Loads test data (`sample_test_data.csv`) from S3.
+  * Loads the saved model from `models/spark_rf_model`.
+  * Generates predictions with fraud probabilities.
+  * Saves output to `s3://.../prediction_output/` as CSV.
+
+![AWS predict model py](https://github.com/user-attachments/assets/6c1ee711-ab24-4ea5-8d39-c8855597e5f4)
+
+![EMR prediction](https://github.com/user-attachments/assets/bd96d50f-319c-4743-9e63-8b4c736447c1)
+
+![AWS prediction output](https://github.com/user-attachments/assets/734a24c5-fd35-4764-835a-3d97a54dcd4c)
+
+---
+
+### **4. Schema Discovery with AWS Glue Crawler**
+
+* **Action:** I create and run a **Glue crawler** (`fraud_prediction_crawler`) pointed at the `prediction_output/` prefix in S3.
+* **Outcome:**
+
+  * Glue automatically infers schema (columns like `Time`, `predicted_class`, `fraud_score`).
+  * Creates a Glue **table** in a Glue **database** (e.g., `fraud_detection_db`).
+  * This table acts as metadata for Athena to query structured output.
+
+![AWS Glue crawler](https://github.com/user-attachments/assets/5299f0d9-bae1-4d68-a98f-89590b10a8d7)
+
+![AWS Glue Table](https://github.com/user-attachments/assets/c0002bd4-acde-4a05-b1c3-7b2a527d1f6a)
+
+---
+
+### **5. Query Results with Amazon Athena**
+
+* **Action:** In Athena, I connect to the Glue Data Catalog, select the `fraud_detection_db`, and query the table using standard SQL.
+
+  ```sql
+  SELECT * FROM fraud_detection_db.prediction_output
+  ORDER BY fraud_score DESC
+  ```
+
+![AWS Athena](https://github.com/user-attachments/assets/378b67a4-a228-4bba-912c-463d055b4970)
+
+* **Benefits:**
+
+  * No infrastructure to manage.
+  * Near-instant ad hoc analysis of fraud predictions.
+
+---
+
+### **Future Improment (Next Steps)**
+
+You can now integrate with:
+
+* **QuickSight:** For dashboarding and visualizations.
+* **OpenSearch / DynamoDB:** For real-time querying or alerting.
+* **CloudWatch:** To log job statuses, monitor Glue jobs, or EMR job failures.
+
+---
 
 
