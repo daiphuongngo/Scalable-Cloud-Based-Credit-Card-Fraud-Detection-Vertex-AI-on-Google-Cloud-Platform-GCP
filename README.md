@@ -80,12 +80,12 @@ I expect my work to deliver trained binary classification models deployed on Ver
 • Scheduling: When time arrives as scheduled, the fraud detection request at scheduled time will be triggered to run Pub/Sub job that launches the Dataproc job which runs Pyspark Random Forest prediction using Random Forest model and the new data in GCS, and receives fraude alerts in Pub/Sub and Big Query.
 
 
-![ChatGPT Image May 16, 2025, 02_08_24 AM](https://github.com/user-attachments/assets/9aee4499-cbaa-4b5e-9d74-052858b41da5)
+![ChatGPT Image May 16, 2025, 02_32_56 AM](https://github.com/user-attachments/assets/95be2edf-b319-4cb5-92d5-fb2ceec7d924)
+
 
 
 ## Implementation
-			
-						 					
+							 					
 My Technologies Used include: 
 
 •	Google Cloud Platform: ``GCS``, ``BigQuery``, ``Pub/Sub``, ``Dataproc``, ``Vertex AI``
@@ -122,7 +122,7 @@ My Step-by-step Highlights on GCP include:
 
 9.	Scheduled Cloud Scheduler job that triggers Pub/Sub laurching the preset Dataproc job
 
-My Step-by-step Highlights on GCP include:
+My Step-by-step Highlights on AWS include:
 
 1. Data Ingestion into Amazon S3
 
