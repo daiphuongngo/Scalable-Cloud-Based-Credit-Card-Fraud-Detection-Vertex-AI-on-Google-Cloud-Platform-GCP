@@ -28,7 +28,7 @@ https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud
 
 ## Expected Results
 
-I expect my work to deliver trained binary classification models deployed on Vertex AI that predicts the probability of a credit card transaction being fraudument. Models to be trained and evaluated include Random Forest and more if necessary. Furthermore, a simulated new real-time scoring setup using Pub/Sub, Dataflow and Vertex AI Endpoint. On AWS, 
+I expect my work to deliver trained binary classification models deployed on Vertex AI that predicts the probability of a credit card transaction being fraudument. Models to be trained and evaluated include Random Forest and more if necessary. Furthermore, a simulated new real-time scoring setup using Pub/Sub will be deployed. On AWS, a simulated real-time predicted scoring triggered by AWS EMR Serverless will be implemented.
 
 ## Application Overview and Technologies used 
 
