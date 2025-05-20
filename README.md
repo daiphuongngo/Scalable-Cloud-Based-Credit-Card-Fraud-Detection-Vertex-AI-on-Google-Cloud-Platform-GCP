@@ -67,7 +67,7 @@ I expect my work to deliver trained binary classification models deployed on Ver
            | Dataproc, Pub Sub  |
            +--------------------+
 ```
-![ChatGPT Image May 8, 2025, 04_59_27 AM](https://github.com/user-attachments/assets/003004de-d743-45d2-af13-b5b44a544c40)
+![ChatGPT Image May 20, 2025, 01_32_41 AM](https://github.com/user-attachments/assets/61a68816-e302-4cc9-b481-98029fd040c8)
 
 • Model Training: I trained the RandomForestClassifier using sklearn on Vertex AI Workbench’s Jupyter notebook and saved as .pkl to GCS. An alternative method is coding in PySpark in a train_model.py file saved in GCS folder that could be used and run via Dataproc to generate the model’s .pkl file stored in GCS.
 
